@@ -5,6 +5,7 @@
  * 제공하므로 여기에 정의하지 않는다. (FreeRTOSConfig.h 참고)
  */
 #include "main.h"
+#include "stm32f4xx_it.h"
 
 extern TIM_HandleTypeDef htim6;
 

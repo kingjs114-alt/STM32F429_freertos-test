@@ -9,6 +9,13 @@
 #include <errno.h>
 #include <sys/stat.h>
 
+int _close(int fd);
+int _lseek(int fd, int ptr, int dir);
+int _read(int fd, char *p, int len);
+int _write(int fd, char *p, int len);
+int _isatty(int fd);
+int _fstat(int fd, struct stat *st);
+
 int _close(int fd)                    { (void)fd; return -1; }
 int _lseek(int fd, int ptr, int dir)  { (void)fd; (void)ptr; (void)dir; return 0; }
 int _read(int fd, char *p, int len)   { (void)fd; (void)p; (void)len; return 0; }

@@ -9,6 +9,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
+void *_sbrk(ptrdiff_t incr);
+
 void *_sbrk(ptrdiff_t incr)
 {
     extern uint8_t _end;              /* 링커 스크립트: .bss 끝 */

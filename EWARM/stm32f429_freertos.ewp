@@ -1140,6 +1140,9 @@
     <file>
       <name>$PROJ_DIR$\..\Core\Inc\app.h</name>
     </file>
+    <file>
+      <name>$PROJ_DIR$\..\Core\Inc\stm32f4xx_it.h</name>
+    </file>
   </group>
 </project>
 
