@@ -130,7 +130,7 @@ CMakeLists.txt
 
 ---
 
-## 6. FreeRTOS 처음 쓸 때 꼭 알아야 할 것
+## 5. FreeRTOS 처음 쓸 때 꼭 알아야 할 것
 
 1. **Task 안에서 `HAL_Delay()` 대신 `vTaskDelay()`/`vTaskDelayUntil()`**
    `HAL_Delay`는 CPU를 붙잡고 기다리지만, `vTaskDelay`는 그동안 다른 Task를 실행시킵니다.
