@@ -83,7 +83,7 @@ Core/
   Src/wdg_task.c                WdgTask + IWDG 설정
   Src/stm32f4xx_it.c            인터럽트 핸들러
   Startup/startup_stm32f429xx.s 벡터 테이블, 리셋 핸들러 (GCC용)
-EWARM/                          IAR 9.3용 startup, 링커(.icf), 프로젝트 만드는 방법
+EWARM/                          IAR 9.3 프로젝트 (.eww/.ewp/.ewd), startup, 링커(.icf)
 Drivers/                        ST CMSIS, HAL, BSP(LCD/SDRAM), ILI9341 드라이버
 Middlewares/Third_Party/FreeRTOS  FreeRTOS-Kernel V11.1.0 (ARM_CM4F 포트 GCC/IAR, heap_4)
 Utilities/Fonts                 LCD 폰트
@@ -102,8 +102,8 @@ CMakeLists.txt
 두 가지 방법 중 편한 것을 쓰면 됩니다. 소스 코드는 같습니다.
 
 ### 방법 A: IAR Embedded Workbench 9.3 (추천: IDE 하나로 빌드+굽기+디버그)
-**[EWARM/README_IAR.md](EWARM/README_IAR.md)** 의 순서대로 프로젝트를 한 번 만들면,
-`F7`(빌드) → `Ctrl+D`(굽기+디버그) → `F5`(실행) 입니다. 보드에 내장된 ST-LINK 를 IAR 이 바로 사용합니다.
+**`EWARM/stm32f429_freertos.eww` 를 열고** `F7`(빌드) → `Ctrl+D`(굽기+디버그) → `F5`(실행).
+보드에 내장된 ST-LINK 를 IAR 이 바로 사용합니다. 자세한 내용은 [EWARM/README_IAR.md](EWARM/README_IAR.md).
 
 ### 방법 B: GCC + CMake (무료 도구)
 1. 설치 (Windows 기준)

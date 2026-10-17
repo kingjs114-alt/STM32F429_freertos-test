@@ -3,3 +3,7 @@ build/
 *.elf
 *.map
 .vscode/
+EWARM/Debug/
+EWARM/settings/
+EWARM/*.dep
+EWARM/*.ewt
