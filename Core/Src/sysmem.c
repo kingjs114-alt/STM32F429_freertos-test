@@ -2,6 +2,9 @@
  * sysmem.c - newlib malloc 용 _sbrk (snprintf 등이 내부적으로 사용할 수 있음)
  * FreeRTOS Task 들은 heap_4 (configTOTAL_HEAP_SIZE) 를 사용한다.
  */
+/* GCC(newlib) 전용. IAR 은 자체 라이브러리(DLIB)를 쓰므로 컴파일되지 않음 */
+#if defined(__GNUC__) && !defined(__ICCARM__)
+
 #include <errno.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -27,3 +30,5 @@ void *_sbrk(ptrdiff_t incr)
     heapEnd += incr;
     return prev;
 }
+
+#endif /* __GNUC__ */

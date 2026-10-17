@@ -100,8 +100,11 @@ extern uint32_t SystemCoreClock;
 #define configMAX_SYSCALL_INTERRUPT_PRIORITY \
     (configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY << (8 - configPRIO_BITS))
 
-/* configASSERT: 잘못 사용하면 여기서 멈춤 -> 디버거로 호출 스택 확인 */
+/* configASSERT: 잘못 사용하면 여기서 멈춤 -> 디버거로 호출 스택 확인
+ * (이 파일은 IAR 어셈블러(portasm.s)도 include 하므로 C 선언은 C 컴파일러일 때만) */
+#if defined(__ICCARM__) || defined(__CC_ARM) || defined(__GNUC__)
 void vAssertCalled(const char *file, int line);
+#endif
 #define configASSERT(x) if ((x) == 0) { vAssertCalled(__FILE__, __LINE__); }
 
 /*-------------------------------------------------------------------------

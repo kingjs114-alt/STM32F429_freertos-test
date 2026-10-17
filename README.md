@@ -82,11 +82,12 @@ Core/
   Src/lcd_task.c                LcdTask
   Src/wdg_task.c                WdgTask + IWDG 설정
   Src/stm32f4xx_it.c            인터럽트 핸들러
-  Startup/startup_stm32f429xx.s 벡터 테이블, 리셋 핸들러
+  Startup/startup_stm32f429xx.s 벡터 테이블, 리셋 핸들러 (GCC용)
+EWARM/                          IAR 9.3용 startup, 링커(.icf), 프로젝트 만드는 방법
 Drivers/                        ST CMSIS, HAL, BSP(LCD/SDRAM), ILI9341 드라이버
-Middlewares/Third_Party/FreeRTOS  FreeRTOS-Kernel V11.1.0 (ARM_CM4F 포트, heap_4)
+Middlewares/Third_Party/FreeRTOS  FreeRTOS-Kernel V11.1.0 (ARM_CM4F 포트 GCC/IAR, heap_4)
 Utilities/Fonts                 LCD 폰트
-STM32F429ZITX_FLASH.ld          링커 스크립트
+STM32F429ZITX_FLASH.ld          링커 스크립트 (GCC용)
 CMakeLists.txt
 ```
 
@@ -96,36 +97,36 @@ CMakeLists.txt
 
 ---
 
-## 4. 빌드
+## 4. 빌드 & 굽기
 
-### 명령줄 (CMake + Arm GNU Toolchain)
-필요: `arm-none-eabi-gcc`, `cmake` (3.22 이상), `make` 또는 `ninja`
+두 가지 방법 중 편한 것을 쓰면 됩니다. 소스 코드는 같습니다.
 
-```bash
-cmake -B build                     # 기본 Debug. Release: -DCMAKE_BUILD_TYPE=Release
-cmake --build build -j
-```
-결과물: `build/stm32f429_freertos.elf`, `.hex`, `.bin`
+### 방법 A: IAR Embedded Workbench 9.3 (추천: IDE 하나로 빌드+굽기+디버그)
+**[EWARM/README_IAR.md](EWARM/README_IAR.md)** 의 순서대로 프로젝트를 한 번 만들면,
+`F7`(빌드) → `Ctrl+D`(굽기+디버그) → `F5`(실행) 입니다. 보드에 내장된 ST-LINK 를 IAR 이 바로 사용합니다.
 
-### VS Code
-STM32 VS Code Extension 또는 CMake Tools 확장으로 이 폴더를 열면 `CMakeLists.txt`를 그대로 사용합니다.
+### 방법 B: GCC + CMake (무료 도구)
+1. 설치 (Windows 기준)
+   - [Arm GNU Toolchain](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads) (`arm-none-eabi`, 설치 시 *Add path to environment variable* 체크)
+   - [CMake](https://cmake.org/download/) 3.22 이상, [Ninja](https://github.com/ninja-build/ninja/releases) (ninja.exe 를 PATH 에)
+   - [STM32CubeProgrammer](https://www.st.com/en/development-tools/stm32cubeprog.html) (굽기용, ST-LINK 드라이버 포함)
+2. 빌드 (저장소 폴더에서)
+   ```bash
+   cmake -B build -G Ninja            # 기본 Debug. Release: -DCMAKE_BUILD_TYPE=Release
+   cmake --build build
+   ```
+   결과물: `build/stm32f429_freertos.elf`, `.hex`, `.bin`
+3. 굽기 (보드의 ST-LINK 쪽 USB 연결 후, 하나 선택)
+   - **STM32CubeProgrammer GUI**: `ST-LINK` 선택 → *Connect* → *Erasing & Programming* → `.elf` 선택 → *Start Programming*
+   - 명령줄:
+     ```bash
+     STM32_Programmer_CLI -c port=SWD -w build/stm32f429_freertos.elf -v -rst
+     # 또는 OpenOCD
+     openocd -f board/stm32f429disc1.cfg -c "program build/stm32f429_freertos.elf verify reset exit"
+     ```
+   - 보드가 USB 드라이브로 보이면 `.bin` 파일을 그 드라이브에 복사해도 됩니다.
 
-## 5. 굽기 (Flash)
-
-보드를 USB(ST-LINK 쪽 Mini-USB)로 연결한 뒤 하나를 선택:
-
-```bash
-# STM32CubeProgrammer CLI
-STM32_Programmer_CLI -c port=SWD -w build/stm32f429_freertos.elf -v -rst
-
-# OpenOCD
-openocd -f board/stm32f429disc1.cfg -c "program build/stm32f429_freertos.elf verify reset exit"
-
-# st-flash (stlink 도구)
-st-flash --reset write build/stm32f429_freertos.bin 0x08000000
-```
-
-> 보드가 USB 드라이브로 보인다면 `.bin` 파일을 그 드라이브에 복사해도 됩니다.
+> VS Code 를 쓴다면 STM32 VS Code Extension 또는 CMake Tools 확장으로 이 폴더를 열면 됩니다.
 
 ---
 
